@@ -58,6 +58,14 @@ button {
   margin: 0 auto;
 }
 
+.site-signature {
+  margin-top: 18px;
+  text-align: right;
+  color: var(--muted);
+  font-size: 0.92rem;
+  letter-spacing: 0.04em;
+}
+
 .topbar {
   display: flex;
   align-items: center;

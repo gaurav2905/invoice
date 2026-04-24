@@ -31,6 +31,7 @@ export function AppShell({ children, active = "dashboard" }: Props) {
           </nav>
         </header>
         {children}
+        <footer className="site-signature no-print">Created by Gaurav</footer>
       </div>
     </div>
   );
