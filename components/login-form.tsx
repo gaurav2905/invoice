@@ -38,8 +38,8 @@ export function LoginForm() {
   return (
     <form className="stack" onSubmit={handleSubmit}>
       <div className="field">
-        <label htmlFor="username">Admin Username</label>
-        <input id="username" name="username" placeholder="admin" required />
+        <label htmlFor="username">Username</label>
+        <input id="username" name="username" placeholder="username" required />
       </div>
       <div className="field">
         <label htmlFor="password">Password</label>
