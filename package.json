@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@netlify/plugin-nextjs": "^5.15.9",
     "@supabase/supabase-js": "^2.104.1",
     "bcryptjs": "^3.0.2",
     "clsx": "^2.1.1",
