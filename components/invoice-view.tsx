@@ -49,6 +49,10 @@ export function InvoiceView({ company, invoice, deletable }: Props) {
   }
 
   const waitingSubtotal = Number((invoice.shipperWaitingAmount + invoice.receiverWaitingAmount).toFixed(2));
+  const showShipperWaiting = Boolean(invoice.waitingTimeAtShipper.trim()) || invoice.shipperWaitingAmount > 0;
+  const showReceiverWaiting = Boolean(invoice.waitingTimeAtReceiver.trim()) || invoice.receiverWaitingAmount > 0;
+  const showOtherCharges = invoice.otherCharges > 0;
+  const showAdditionalCharges = showShipperWaiting || showReceiverWaiting || showOtherCharges;
 
   return (
     <div className="stack">
@@ -78,8 +82,9 @@ export function InvoiceView({ company, invoice, deletable }: Props) {
 
       <div className="invoice-paper" ref={invoiceRef}>
         <div className="invoice-header">
-          <div>
+          <div className="invoice-issued-by">
             <span className="eyebrow">Issued By</span>
+            {company.logoDataUrl ? <Image alt={`${company.name} logo`} className="invoice-company-logo" height={84} src={company.logoDataUrl} width={84} /> : null}
             <h1 style={{ marginBottom: 10 }}>{company.name}</h1>
             <div className="invoice-block">
               <div>{company.address}</div>
@@ -88,7 +93,6 @@ export function InvoiceView({ company, invoice, deletable }: Props) {
             </div>
           </div>
           <div className="invoice-meta">
-            {company.logoDataUrl ? <Image alt={`${company.name} logo`} className="logo-preview" height={84} src={company.logoDataUrl} width={84} /> : null}
             <div className="invoice-block" style={{ width: "100%" }}>
               <div className="eyebrow">Invoice Number</div>
               <h2 style={{ margin: "4px 0 0" }}>{invoice.invoiceNumber}</h2>
@@ -164,23 +168,31 @@ export function InvoiceView({ company, invoice, deletable }: Props) {
           </div>
         </div>
 
-        <div className="invoice-section" style={{ marginTop: 20 }}>
-          <div className="invoice-block stack" style={{ gap: 10 }}>
-            <div className="eyebrow">Additional Charges</div>
-            <div className="charges-row">
-              <span>Waiting time at shipper {invoice.waitingTimeAtShipper ? `(${invoice.waitingTimeAtShipper})` : ""}</span>
-              <strong>{formatCurrency(invoice.shipperWaitingAmount)}</strong>
-            </div>
-            <div className="charges-row">
-              <span>Waiting time at receiver {invoice.waitingTimeAtReceiver ? `(${invoice.waitingTimeAtReceiver})` : ""}</span>
-              <strong>{formatCurrency(invoice.receiverWaitingAmount)}</strong>
-            </div>
-            <div className="charges-row">
-              <span>Other Charges</span>
-              <strong>{formatCurrency(invoice.otherCharges)}</strong>
+        {showAdditionalCharges ? (
+          <div className="invoice-section" style={{ marginTop: 20 }}>
+            <div className="invoice-block stack" style={{ gap: 10 }}>
+              <div className="eyebrow">Additional Charges</div>
+              {showShipperWaiting ? (
+                <div className="charges-row">
+                  <span>Waiting time at shipper {invoice.waitingTimeAtShipper ? `(${invoice.waitingTimeAtShipper})` : ""}</span>
+                  <strong>{formatCurrency(invoice.shipperWaitingAmount)}</strong>
+                </div>
+              ) : null}
+              {showReceiverWaiting ? (
+                <div className="charges-row">
+                  <span>Waiting time at receiver {invoice.waitingTimeAtReceiver ? `(${invoice.waitingTimeAtReceiver})` : ""}</span>
+                  <strong>{formatCurrency(invoice.receiverWaitingAmount)}</strong>
+                </div>
+              ) : null}
+              {showOtherCharges ? (
+                <div className="charges-row">
+                  <span>Other Charges</span>
+                  <strong>{formatCurrency(invoice.otherCharges)}</strong>
+                </div>
+              ) : null}
             </div>
           </div>
-        </div>
+        ) : null}
 
         {invoice.remarks ? (
           <div className="invoice-section" style={{ marginTop: 20 }}>
@@ -196,14 +208,18 @@ export function InvoiceView({ company, invoice, deletable }: Props) {
             <span>Items Subtotal</span>
             <strong>{formatCurrency(invoice.itemsSubtotal)}</strong>
           </div>
-          <div className="invoice-total-row">
-            <span>Waiting Charges</span>
-            <strong>{formatCurrency(waitingSubtotal)}</strong>
-          </div>
-          <div className="invoice-total-row">
-            <span>Other Charges</span>
-            <strong>{formatCurrency(invoice.otherCharges)}</strong>
-          </div>
+          {waitingSubtotal > 0 ? (
+            <div className="invoice-total-row">
+              <span>Waiting Charges</span>
+              <strong>{formatCurrency(waitingSubtotal)}</strong>
+            </div>
+          ) : null}
+          {showOtherCharges ? (
+            <div className="invoice-total-row">
+              <span>Other Charges</span>
+              <strong>{formatCurrency(invoice.otherCharges)}</strong>
+            </div>
+          ) : null}
           <div className="invoice-total-row">
             <span>Subtotal</span>
             <strong>{formatCurrency(invoice.taxableAmount)}</strong>

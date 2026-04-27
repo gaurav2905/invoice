@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import { AppShell } from "@/components/app-shell";
 import { InvoiceForm } from "@/components/invoice-form";
-import { getCompanies, getInvoice, getSavedParties } from "@/lib/store";
+import { getCompanies, getInvoice, getSavedInvoiceContacts, getSavedParties } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
 
@@ -17,11 +17,12 @@ export default async function EditInvoicePage({ params }: Props) {
 
   const companies = await getCompanies();
   const savedParties = await getSavedParties();
+  const savedInvoiceContacts = await getSavedInvoiceContacts();
 
   return (
     <AppShell active="invoices">
       <div className="content-grid">
-        <InvoiceForm companies={companies} invoice={invoice} savedParties={savedParties} />
+        <InvoiceForm companies={companies} invoice={invoice} savedInvoiceContacts={savedInvoiceContacts} savedParties={savedParties} />
       </div>
     </AppShell>
   );

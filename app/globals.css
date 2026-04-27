@@ -463,6 +463,13 @@ th {
   justify-items: end;
 }
 
+.invoice-issued-by {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 10px;
+}
+
 .invoice-block {
   padding: 18px;
   border-radius: var(--radius-md);
@@ -512,6 +519,16 @@ th {
   border-radius: 18px;
   border: 1px solid var(--line);
   background: white;
+}
+
+.invoice-company-logo {
+  width: 84px;
+  height: 84px;
+  object-fit: contain;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: white;
+  padding: 6px;
 }
 
 @media (max-width: 980px) {

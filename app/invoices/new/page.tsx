@@ -2,13 +2,14 @@ import Link from "next/link";
 
 import { AppShell } from "@/components/app-shell";
 import { InvoiceForm } from "@/components/invoice-form";
-import { getCompanies, getSavedParties } from "@/lib/store";
+import { getCompanies, getSavedInvoiceContacts, getSavedParties } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
 
 export default async function NewInvoicePage() {
   const companies = await getCompanies();
   const savedParties = await getSavedParties();
+  const savedInvoiceContacts = await getSavedInvoiceContacts();
 
   return (
     <AppShell active="invoices">
@@ -27,7 +28,7 @@ export default async function NewInvoicePage() {
             </Link>
           </section>
         ) : (
-          <InvoiceForm companies={companies} savedParties={savedParties} />
+          <InvoiceForm companies={companies} savedInvoiceContacts={savedInvoiceContacts} savedParties={savedParties} />
         )}
       </div>
     </AppShell>

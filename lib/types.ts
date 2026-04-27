@@ -70,3 +70,8 @@ export type SavedParty = {
   pan: string;
   address: string;
 };
+
+export type SavedInvoiceContacts = {
+  shippers: string[];
+  consignees: string[];
+};

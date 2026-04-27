@@ -1,5 +1,5 @@
 import { computeInvoiceTotals } from "@/lib/format";
-import { Company, GstMode, Invoice, InvoiceLineItem, SavedParty } from "@/lib/types";
+import { Company, GstMode, Invoice, InvoiceLineItem, SavedInvoiceContacts, SavedParty } from "@/lib/types";
 import { getSupabaseAdmin } from "@/lib/supabase/server";
 
 const INVOICE_SEQUENCE_START = 111;
@@ -446,4 +446,32 @@ export async function getSavedParties(): Promise<SavedParty[]> {
   }
 
   return Array.from(latestByName.values()).sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export async function getSavedInvoiceContacts(): Promise<SavedInvoiceContacts> {
+  const invoices = await getInvoices();
+  const shippers = new Map<string, string>();
+  const consignees = new Map<string, string>();
+
+  for (const invoice of invoices.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))) {
+    for (const item of invoice.lineItems) {
+      const shipper = item.shipper.trim();
+      const consignee = item.consignee.trim();
+
+      if (shipper) {
+        const key = shipper.toLowerCase();
+        if (!shippers.has(key)) shippers.set(key, shipper);
+      }
+
+      if (consignee) {
+        const key = consignee.toLowerCase();
+        if (!consignees.has(key)) consignees.set(key, consignee);
+      }
+    }
+  }
+
+  return {
+    shippers: Array.from(shippers.values()).sort((a, b) => a.localeCompare(b)),
+    consignees: Array.from(consignees.values()).sort((a, b) => a.localeCompare(b))
+  };
 }

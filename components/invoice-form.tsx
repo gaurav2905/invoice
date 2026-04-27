@@ -4,11 +4,12 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useMemo, useState } from "react";
 
 import { computeInvoiceTotals, formatCurrency, getLineItemAmount, labelForGstMode } from "@/lib/format";
-import { Company, GstMode, Invoice, SavedParty } from "@/lib/types";
+import { Company, GstMode, Invoice, SavedInvoiceContacts, SavedParty } from "@/lib/types";
 
 type Props = {
   companies: Company[];
   invoice?: Invoice;
+  savedInvoiceContacts: SavedInvoiceContacts;
   savedParties: SavedParty[];
 };
 
@@ -60,7 +61,7 @@ function createBlankItem(): LineItemState {
   };
 }
 
-export function InvoiceForm({ companies, invoice, savedParties }: Props) {
+export function InvoiceForm({ companies, invoice, savedInvoiceContacts, savedParties }: Props) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -333,6 +334,19 @@ export function InvoiceForm({ companies, invoice, savedParties }: Props) {
                       <div className="form-grid">
                         <div className="field">
                           <label>Shipper</label>
+                          <select
+                            value={savedInvoiceContacts.shippers.includes(item.shipper) ? item.shipper : ""}
+                            onChange={(e) => {
+                              if (e.target.value) updateLineItem(index, { shipper: e.target.value });
+                            }}
+                          >
+                            <option value="">Select previously saved shipper</option>
+                            {savedInvoiceContacts.shippers.map((shipper) => (
+                              <option key={shipper} value={shipper}>
+                                {shipper}
+                              </option>
+                            ))}
+                          </select>
                           <textarea value={item.shipper} onChange={(e) => updateLineItem(index, { shipper: e.target.value })} />
                         </div>
                         <div className="field">
@@ -341,6 +355,19 @@ export function InvoiceForm({ companies, invoice, savedParties }: Props) {
                         </div>
                         <div className="field">
                           <label>Consignee</label>
+                          <select
+                            value={savedInvoiceContacts.consignees.includes(item.consignee) ? item.consignee : ""}
+                            onChange={(e) => {
+                              if (e.target.value) updateLineItem(index, { consignee: e.target.value });
+                            }}
+                          >
+                            <option value="">Select previously saved consignee</option>
+                            {savedInvoiceContacts.consignees.map((consignee) => (
+                              <option key={consignee} value={consignee}>
+                                {consignee}
+                              </option>
+                            ))}
+                          </select>
                           <textarea value={item.consignee} onChange={(e) => updateLineItem(index, { consignee: e.target.value })} />
                         </div>
                         <div className="field">
