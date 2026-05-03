@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { deleteInvoice, getInvoice, updateInvoice } from "@/lib/store";
-import { invoiceSchema } from "@/lib/validators";
+import { deleteInvoice, getInvoice, updateInvoice, updateInvoicePaymentStatus } from "@/lib/store";
+import { invoiceSchema, paymentStatusSchema } from "@/lib/validators";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -29,6 +29,26 @@ export async function PUT(request: Request, { params }: Props) {
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Unable to update invoice." },
+      { status: 400 }
+    );
+  }
+}
+
+export async function PATCH(request: Request, { params }: Props) {
+  const { id } = await params;
+  const payload = await request.json();
+  const parsed = paymentStatusSchema.safeParse(payload);
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid payment status." }, { status: 400 });
+  }
+
+  try {
+    const invoice = await updateInvoicePaymentStatus(id, parsed.data.paymentReceived);
+    if (!invoice) return NextResponse.json({ error: "Invoice not found." }, { status: 404 });
+    return NextResponse.json({ invoice });
+  } catch (error) {
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Unable to update payment status." },
       { status: 400 }
     );
   }

@@ -54,6 +54,7 @@ export type Invoice = {
   totalTax: number;
   totalAmount: number;
   totalAmountWords: string;
+  paymentReceived: boolean;
   createdAt: string;
   updatedAt: string;
 };

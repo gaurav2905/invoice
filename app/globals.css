@@ -1,17 +1,21 @@
 :root {
-  --bg: #f6f3ee;
-  --panel: rgba(255, 255, 255, 0.84);
-  --panel-strong: #ffffff;
-  --ink: #161515;
-  --muted: #6c645d;
-  --line: rgba(22, 21, 21, 0.08);
-  --accent: #0e7c66;
-  --accent-strong: #085a4a;
-  --danger: #c25240;
-  --shadow: 0 24px 60px rgba(29, 22, 15, 0.12);
-  --radius-lg: 28px;
-  --radius-md: 18px;
-  --radius-sm: 12px;
+  --bg: #e8f2f7;
+  --panel: rgba(255, 255, 255, 0.48);
+  --panel-strong: rgba(255, 255, 255, 0.68);
+  --ink: #111827;
+  --muted: #596579;
+  --line: rgba(255, 255, 255, 0.55);
+  --line-dark: rgba(17, 24, 39, 0.1);
+  --accent: #0f8f9f;
+  --accent-strong: #095f73;
+  --accent-glow: rgba(15, 143, 159, 0.28);
+  --danger: #d65349;
+  --danger-soft: rgba(214, 83, 73, 0.14);
+  --shadow: 0 28px 80px rgba(23, 39, 63, 0.18);
+  --inner-glow: inset 0 1px 0 rgba(255, 255, 255, 0.76);
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 10px;
 }
 
 * {
@@ -26,10 +30,25 @@ body {
   margin: 0;
   color: var(--ink);
   background:
-    radial-gradient(circle at top left, rgba(14, 124, 102, 0.15), transparent 28%),
-    radial-gradient(circle at top right, rgba(194, 82, 64, 0.14), transparent 22%),
-    linear-gradient(180deg, #fbf8f3 0%, #f4efe7 100%);
-  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+    radial-gradient(circle at 8% 6%, rgba(46, 196, 182, 0.34), transparent 28%),
+    radial-gradient(circle at 88% 10%, rgba(255, 178, 95, 0.3), transparent 24%),
+    radial-gradient(circle at 72% 82%, rgba(96, 165, 250, 0.3), transparent 30%),
+    linear-gradient(135deg, #eef8fb 0%, #dfeaf1 46%, #f4eee6 100%);
+  font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+  min-height: 100vh;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent 76%);
 }
 
 a {
@@ -74,9 +93,11 @@ button {
   padding: 20px 24px;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  background: var(--panel);
-  backdrop-filter: blur(16px);
-  box-shadow: var(--shadow);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.32)),
+    rgba(255, 255, 255, 0.26);
+  backdrop-filter: blur(26px) saturate(1.5);
+  box-shadow: var(--shadow), var(--inner-glow);
   position: sticky;
   top: 20px;
   z-index: 20;
@@ -99,7 +120,8 @@ button {
 .stat-card strong,
 .invoice-paper h1,
 .invoice-paper h2 {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+  letter-spacing: 0;
 }
 
 .brand h1,
@@ -117,25 +139,34 @@ button {
 .nav-link,
 .btn {
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.8);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.36)),
+    rgba(255, 255, 255, 0.26);
   color: var(--ink);
   padding: 12px 16px;
   border-radius: 999px;
   transition: 160ms ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82), 0 10px 24px rgba(23, 39, 63, 0.08);
+  backdrop-filter: blur(18px) saturate(1.35);
 }
 
 .nav-link.active,
 .btn-primary,
 .floating-action {
-  background: var(--accent);
+  background:
+    linear-gradient(135deg, rgba(15, 143, 159, 0.95), rgba(28, 118, 154, 0.9)),
+    var(--accent);
   color: white;
-  border-color: transparent;
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 16px 34px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
 .nav-link:hover,
 .btn:hover,
 .floating-action:hover {
   transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 18px 38px rgba(23, 39, 63, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .content-grid {
@@ -156,11 +187,13 @@ button {
 .stat-card,
 .invoice-paper,
 .login-card {
-  background: var(--panel);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.34)),
+    var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow), var(--inner-glow);
+  backdrop-filter: blur(28px) saturate(1.45);
 }
 
 .panel {
@@ -202,6 +235,13 @@ button {
   font-size: 2rem;
 }
 
+.revenue-breakdown {
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -232,13 +272,18 @@ button {
 
 .field input,
 .field select,
-.field textarea {
+.field textarea,
+.row-actions input,
+.row-actions select {
   width: 100%;
   padding: 14px 16px;
   border-radius: var(--radius-md);
-  border: 1px solid rgba(22, 21, 21, 0.1);
-  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.58);
+  background: rgba(255, 255, 255, 0.54);
+  color: var(--ink);
   outline: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 8px 18px rgba(23, 39, 63, 0.06);
+  backdrop-filter: blur(18px);
 }
 
 .field textarea {
@@ -248,27 +293,31 @@ button {
 
 .field input:focus,
 .field select:focus,
-.field textarea:focus {
-  border-color: rgba(14, 124, 102, 0.55);
-  box-shadow: 0 0 0 4px rgba(14, 124, 102, 0.12);
+.field textarea:focus,
+.row-actions input:focus,
+.row-actions select:focus {
+  border-color: rgba(15, 143, 159, 0.62);
+  box-shadow: 0 0 0 4px rgba(15, 143, 159, 0.13), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .table-wrap {
   overflow-x: auto;
   border-radius: var(--radius-md);
   border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.54);
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 820px;
+  min-width: 1080px;
 }
 
 th,
 td {
   padding: 16px;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.45);
   text-align: left;
   vertical-align: top;
 }
@@ -277,6 +326,20 @@ th {
   color: var(--muted);
   font-weight: 600;
   font-size: 0.92rem;
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.actions-column {
+  width: 330px;
+  min-width: 330px;
+}
+
+tbody tr {
+  transition: background 160ms ease;
+}
+
+tbody tr:hover {
+  background: rgba(255, 255, 255, 0.28);
 }
 
 .pill {
@@ -285,14 +348,16 @@ th {
   gap: 6px;
   padding: 8px 12px;
   border-radius: 999px;
-  background: rgba(14, 124, 102, 0.1);
+  background: rgba(15, 143, 159, 0.13);
   color: var(--accent-strong);
   font-size: 0.85rem;
+  border: 1px solid rgba(15, 143, 159, 0.16);
 }
 
 .pill.danger {
-  background: rgba(194, 82, 64, 0.12);
+  background: var(--danger-soft);
   color: var(--danger);
+  border-color: rgba(214, 83, 73, 0.16);
 }
 
 .row-actions {
@@ -301,16 +366,93 @@ th {
   flex-wrap: wrap;
 }
 
+.table-actions {
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 6px;
+}
+
+.table-actions .btn {
+  min-width: 56px;
+  min-height: 34px;
+  padding: 7px 12px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82), 0 8px 18px rgba(23, 39, 63, 0.07);
+}
+
+.table-actions .btn-danger {
+  min-width: 70px;
+}
+
+.payment-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 0 2px;
+  border: 0;
+  background: transparent;
+  color: var(--danger);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.payment-toggle:has(input:checked) {
+  color: var(--accent-strong);
+}
+
+.payment-toggle input {
+  appearance: none;
+  width: 48px;
+  height: 28px;
+  margin: 0;
+  border-radius: 999px;
+  background: rgba(17, 24, 39, 0.24);
+  cursor: pointer;
+  position: relative;
+  transition: 160ms ease;
+  box-shadow: inset 0 1px 2px rgba(17, 24, 39, 0.16);
+}
+
+.payment-toggle input::before {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  top: 3px;
+  left: 3px;
+  border-radius: 999px;
+  background: white;
+  box-shadow: 0 2px 7px rgba(17, 24, 39, 0.2);
+  transition: 160ms ease;
+}
+
+.payment-toggle input:checked {
+  background: #3498db;
+}
+
+.payment-toggle input:checked::before {
+  transform: translateX(20px);
+}
+
 .btn-primary {
   padding-inline: 18px;
 }
 
 .btn-ghost {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .btn-danger {
-  background: rgba(194, 82, 64, 0.12);
+  background: var(--danger-soft);
   color: var(--danger);
 }
 
@@ -321,7 +463,7 @@ th {
   width: 64px;
   height: 64px;
   border-radius: 999px;
-  box-shadow: 0 20px 40px rgba(14, 124, 102, 0.28);
+  box-shadow: 0 20px 40px var(--accent-glow);
   font-size: 2rem;
   display: grid;
   place-items: center;
@@ -359,9 +501,11 @@ th {
 
 .login-copy {
   background:
-    linear-gradient(140deg, rgba(14, 124, 102, 0.94), rgba(8, 90, 74, 0.96)),
-    radial-gradient(circle at top, rgba(255, 255, 255, 0.22), transparent 35%);
+    radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.26), transparent 26%),
+    linear-gradient(140deg, rgba(10, 103, 122, 0.92), rgba(15, 143, 159, 0.82) 52%, rgba(229, 125, 78, 0.76)),
+    rgba(255, 255, 255, 0.2);
   color: white;
+  backdrop-filter: blur(22px) saturate(1.35);
 }
 
 .login-copy h1 {
@@ -391,18 +535,21 @@ th {
 }
 
 .notice {
-  background: rgba(14, 124, 102, 0.08);
+  background: rgba(15, 143, 159, 0.1);
   color: var(--accent-strong);
+  border: 1px solid rgba(15, 143, 159, 0.12);
 }
 
 .error-text {
-  background: rgba(194, 82, 64, 0.12);
+  background: var(--danger-soft);
   color: var(--danger);
+  border: 1px solid rgba(214, 83, 73, 0.16);
 }
 
 .success-text {
-  background: rgba(14, 124, 102, 0.08);
+  background: rgba(15, 143, 159, 0.1);
   color: var(--accent-strong);
+  border: 1px solid rgba(15, 143, 159, 0.12);
 }
 
 .summary-card {
@@ -410,8 +557,12 @@ th {
   gap: 12px;
   padding: 20px;
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.8);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0.26)),
+    rgba(255, 255, 255, 0.24);
   border: 1px solid var(--line);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.66);
+  backdrop-filter: blur(20px) saturate(1.35);
 }
 
 .line-item-card {
@@ -420,7 +571,8 @@ th {
   padding: 18px;
   border-radius: var(--radius-md);
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.34);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.64);
 }
 
 .line-item-amount {
@@ -434,13 +586,14 @@ th {
   gap: 0;
   padding: 12px 18px;
   border-radius: var(--radius-md);
-  background: rgba(22, 21, 21, 0.03);
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--line);
 }
 
 .invoice-paper {
   width: min(960px, 100%);
   margin: 0 auto;
-  background: #fffdf9;
+  background: rgba(255, 255, 255, 0.84);
   padding: 34px;
 }
 
@@ -473,7 +626,7 @@ th {
 .invoice-block {
   padding: 18px;
   border-radius: var(--radius-md);
-  background: rgba(246, 243, 238, 0.7);
+  background: rgba(255, 255, 255, 0.48);
   border: 1px solid var(--line);
 }
 
@@ -518,7 +671,8 @@ th {
   object-fit: cover;
   border-radius: 18px;
   border: 1px solid var(--line);
-  background: white;
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
 }
 
 .invoice-company-logo {
@@ -527,7 +681,7 @@ th {
   object-fit: contain;
   border-radius: 18px;
   border: 1px solid var(--line);
-  background: white;
+  background: rgba(255, 255, 255, 0.68);
   padding: 6px;
 }
 
@@ -573,6 +727,10 @@ th {
 @media print {
   body {
     background: white;
+  }
+
+  body::before {
+    display: none;
   }
 
   .topbar,

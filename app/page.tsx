@@ -39,6 +39,10 @@ export default async function DashboardPage() {
               <span className="eyebrow">Revenue</span>
               <strong>{formatCurrency(stats.totalRevenue)}</strong>
               <span className="muted">Aggregate billed amount</span>
+              <div className="revenue-breakdown">
+                <span>Received: {formatCurrency(stats.totalReceived)}</span>
+                <span>Pending: {formatCurrency(stats.totalPending)}</span>
+              </div>
             </article>
             <article className="stat-card">
               <span className="eyebrow">With HST/GST</span>

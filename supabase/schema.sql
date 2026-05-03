@@ -39,11 +39,15 @@ create table if not exists public.invoices (
   total_tax numeric(12, 2) not null default 0,
   total_amount numeric(12, 2) not null default 0,
   total_amount_words text not null,
+  payment_received boolean not null default false,
   created_at timestamptz not null default timezone('utc', now()),
   updated_at timestamptz not null default timezone('utc', now()),
   unique (company_id, sequence),
   unique (invoice_number)
 );
+
+alter table public.invoices
+add column if not exists payment_received boolean not null default false;
 
 create index if not exists invoices_company_id_idx on public.invoices(company_id);
 create index if not exists invoices_invoice_date_idx on public.invoices(invoice_date desc);

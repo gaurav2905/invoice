@@ -40,3 +40,7 @@ export const invoiceSchema = z.object({
   gstRate: z.coerce.number().min(0).max(100),
   gstMode: z.enum(["none", "intra", "inter"])
 });
+
+export const paymentStatusSchema = z.object({
+  paymentReceived: z.boolean()
+});

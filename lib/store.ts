@@ -45,6 +45,7 @@ type InvoiceRow = {
   total_tax: number;
   total_amount: number;
   total_amount_words: string;
+  payment_received: boolean | null;
   created_at: string;
   updated_at: string;
 };
@@ -174,6 +175,7 @@ function mapInvoice(row: InvoiceRow): Invoice {
     totalTax: Number(row.total_tax || 0),
     totalAmount: Number(row.total_amount || 0),
     totalAmountWords: row.total_amount_words,
+    paymentReceived: Boolean(row.payment_received),
     createdAt: row.created_at,
     updatedAt: row.updated_at
   };
@@ -312,6 +314,7 @@ export async function createInvoice(input: InvoiceInput) {
     total_tax: totals.totalTax,
     total_amount: totals.totalAmount,
     total_amount_words: totals.totalAmountWords,
+    payment_received: false,
     created_at: now,
     updated_at: now
   };
@@ -372,6 +375,21 @@ export async function updateInvoice(id: string, input: InvoiceInput) {
   return data ? mapInvoice(data) : null;
 }
 
+export async function updateInvoicePaymentStatus(id: string, paymentReceived: boolean) {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from("invoices")
+    .update({
+      payment_received: paymentReceived,
+      updated_at: new Date().toISOString()
+    })
+    .eq("id", id)
+    .select()
+    .maybeSingle<InvoiceRow>();
+  if (error) throw new Error(error.message);
+  return data ? mapInvoice(data) : null;
+}
+
 export async function deleteInvoice(id: string) {
   const supabase = getSupabaseAdmin();
   const invoice = await getInvoice(id);
@@ -420,11 +438,19 @@ export async function getStats() {
   const invoices = await getInvoices();
   const companies = await getCompanies();
   const totalRevenue = invoices.reduce((sum, invoice) => sum + invoice.totalAmount, 0);
+  const totalReceived = invoices
+    .filter((invoice) => invoice.paymentReceived)
+    .reduce((sum, invoice) => sum + invoice.totalAmount, 0);
+  const totalPending = invoices
+    .filter((invoice) => !invoice.paymentReceived)
+    .reduce((sum, invoice) => sum + invoice.totalAmount, 0);
   const withGst = invoices.filter((invoice) => invoice.gstMode !== "none").length;
   return {
     companyCount: companies.length,
     invoiceCount: invoices.length,
     totalRevenue,
+    totalReceived,
+    totalPending,
     withGst
   };
 }

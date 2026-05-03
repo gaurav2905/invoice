@@ -19,6 +19,7 @@ export function DashboardTable({ invoices }: Props) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [sortBy, setSortBy] = useState<"date" | "number">("date");
+  const [updatingPaymentId, setUpdatingPaymentId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   const rows = useMemo(() => {
@@ -44,6 +45,27 @@ export function DashboardTable({ invoices }: Props) {
         return;
       }
       router.refresh();
+    });
+  }
+
+  async function handlePaymentToggle(id: string, paymentReceived: boolean) {
+    setUpdatingPaymentId(id);
+    const response = await fetch(`/api/invoices/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ paymentReceived })
+    });
+
+    if (!response.ok) {
+      const result = await response.json().catch(() => ({ error: "Payment status update failed." }));
+      window.alert(result.error || "Payment status update failed.");
+      setUpdatingPaymentId(null);
+      return;
+    }
+
+    startTransition(() => {
+      router.refresh();
+      setUpdatingPaymentId(null);
     });
   }
 
@@ -78,7 +100,7 @@ export function DashboardTable({ invoices }: Props) {
               <th>Date</th>
               <th>Amount</th>
               <th>HST/GST Status</th>
-              <th>Actions</th>
+              <th className="actions-column">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -99,14 +121,23 @@ export function DashboardTable({ invoices }: Props) {
                     <td>
                       <span className={`pill ${invoice.gstMode === "none" ? "danger" : ""}`}>{labelForGstMode(invoice.gstMode)}</span>
                     </td>
-                    <td>
-                      <div className="row-actions">
+                    <td className="actions-column">
+                      <div className="row-actions table-actions">
                         <Link className="btn" href={`/invoices/${invoice.id}`}>
                           View
                         </Link>
                         <Link className="btn" href={`/invoices/${invoice.id}/edit`}>
                           Edit
                         </Link>
+                        <label className="payment-toggle">
+                          <input
+                            type="checkbox"
+                            checked={invoice.paymentReceived}
+                            disabled={updatingPaymentId === invoice.id}
+                            onChange={(event) => handlePaymentToggle(invoice.id, event.target.checked)}
+                          />
+                          <span>{invoice.paymentReceived ? "Paid" : "Pending"}</span>
+                        </label>
                         <button className="btn btn-danger" disabled={!deletable || isPending} onClick={() => handleDelete(invoice.id)}>
                           {deletable ? "Delete" : "Locked"}
                         </button>
