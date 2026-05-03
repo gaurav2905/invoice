@@ -139,8 +139,8 @@ export function InvoiceView({ company, invoice, deletable }: Props) {
 
         <div className="invoice-section" style={{ marginTop: 20 }}>
           {invoice.loadNumber ? <div className="invoice-load-heading">Load# {invoice.loadNumber}</div> : null}
-          <div className="table-wrap">
-            <table>
+          <div className="table-wrap invoice-items-wrap">
+            <table className="invoice-items-table">
               <thead>
                 <tr>
                   <th>Shipper</th>

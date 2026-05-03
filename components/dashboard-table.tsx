@@ -90,7 +90,7 @@ export function DashboardTable({ invoices }: Props) {
           </select>
         </div>
       </div>
-      <div className="table-wrap">
+      <div className="table-wrap dashboard-table-wrap">
         <table>
           <thead>
             <tr>

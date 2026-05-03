@@ -311,7 +311,38 @@ button {
 table {
   width: 100%;
   border-collapse: collapse;
+}
+
+.dashboard-table-wrap table {
   min-width: 1080px;
+}
+
+.invoice-items-wrap {
+  overflow-x: hidden;
+}
+
+.invoice-items-table {
+  table-layout: fixed;
+}
+
+.invoice-items-table th,
+.invoice-items-table td {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.invoice-items-table th:nth-child(1),
+.invoice-items-table th:nth-child(3) {
+  width: 30%;
+}
+
+.invoice-items-table th:nth-child(2),
+.invoice-items-table th:nth-child(4) {
+  width: 13%;
+}
+
+.invoice-items-table th:nth-child(5) {
+  width: 14%;
 }
 
 th,
